@@ -6,7 +6,7 @@ import joblib
 
 
 
-data = pd.read_csv("data/data.csv", sep="\t")
+data = pd.read_csv("data/cleaned_data.csv")
 
 data.columns = data.columns.str.strip()
 
