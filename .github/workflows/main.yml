@@ -17,7 +17,7 @@ jobs:
         run: python src/clean_data.py
         
       - name: Train model
-        run: python src.train.py
+        run: python src/train.py
 
       - name: Build Docker image
         run: docker build -t cancer-api .
