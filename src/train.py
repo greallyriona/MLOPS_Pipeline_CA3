@@ -1,15 +1,13 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from scipy.stats import chi2_contingency
 from sklearn.linear_model import LogisticRegression
 import joblib
-
 
 
 data = pd.read_csv("data/cleaned_data.csv")
 
 data.columns = data.columns.str.strip()
-
+data = data.loc[:, ~data.columns.str.contains('^Unnamed')]
 print(data.columns)
 
 
@@ -21,21 +19,7 @@ x = data.drop(['id', 'diagnosis', 'class_filtered'], axis=1)
 y = data['class_filtered']
 
 
-
-from sklearn.model_selection import train_test_split
-
-
-# Perform Chi-square correlation analysis
-from scipy.stats import chi2_contingency
-
-chi2_results = {}
-for col in x.columns:
-    contingency_table = pd.crosstab(x[col], y)
-    chi2, p, dof, expected = chi2_contingency(contingency_table)
-    chi2_results[col] = p
-
-# Sort and select features with p-value < 0.05
-selected_features = [f for f, p in chi2_results.items() if p < 0.05]
+selected_features = x.columns
 x = x[selected_features]
 
 #Splitting 80% Training & 20 % testing
