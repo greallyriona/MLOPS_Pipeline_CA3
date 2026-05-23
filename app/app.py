@@ -8,25 +8,63 @@ app = Flask(__name__)
 model = joblib.load("model.pkl")
 features = joblib.load("features.pkl")
 
+#home page
 @app.route('/')
 def home():
     return "Breast Cancer Prediction API Running"
 
-@app.route('/predict', methods=['POST'])
+
+#Predict rout taking user input to amke prediction
+@app.route('/predict', methods=['GET', 'POST'])
+
 def predict():
-    data = request.json
 
-    # Convert input to DataFrame
-    input_data = pd.DataFrame([data])
+    #Home page
+    if request.method == 'GET':
+        return '''
+        <h2>Breast Cancer Prediction</h2>
 
-    # Ensure correct feature order
-    input_data = input_data[features]
+        <form method="post">
+            <label>Radius Mean:</label><br>
+            <input type="text" name="radius_mean"><br><br>
 
-    prediction = model.predict(input_data)
+            <label>Texture Mean:</label><br>
+            <input type="text" name="texture_mean"><br><br>
 
-    return jsonify({
-        "prediction": int(prediction[0])
-    })
+            <label>Perimeter Mean:</label><br>
+            <input type="text" name="perimeter_mean"><br><br>
+
+            <label>Area Mean:</label><br>
+            <input type="text" name="area_mean"><br><br>
+
+            <input type="submit" value="Predict">
+        </form>
+        '''
+
+   #handling user input  to make prediciton based off the trained model
+    if request.method == 'POST':
+
+        try:
+            data = {
+                "radius_mean": float(request.form.get("radius_mean")),
+                "texture_mean": float(request.form.get("texture_mean")),
+                "perimeter_mean": float(request.form.get("perimeter_mean")),
+                "area_mean": float(request.form.get("area_mean"))
+            }
+        except:
+            return "<h3>Error: Please enter valid numeric values</h3>"
+
+        # Convert to dataframe
+        input_df = pd.DataFrame([data])
+
+        # Ensure correct feature order
+        input_df = input_df[features]
+
+        prediction = model.predict(input_df)[0]
+
+        return f"<h3>Prediction: {int(prediction)}</h3>"
+
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

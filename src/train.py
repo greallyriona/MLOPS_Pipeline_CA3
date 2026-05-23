@@ -19,7 +19,9 @@ x = data.drop(['id', 'diagnosis', 'class_filtered'], axis=1)
 y = data['class_filtered']
 
 
-selected_features = x.columns
+#reduced number of features for training
+selected_features = ["radius_mean","texture_mean","perimeter_mean","area_mean"]
+
 x = x[selected_features]
 
 #Splitting 80% Training & 20 % testing
@@ -31,6 +33,6 @@ model.fit(x_train, y_train)
 
 # Save model + features
 joblib.dump(model, "model.pkl")
-joblib.dump(selected_features, "features.pkl")
+joblib.dump(list(selected_features), "features.pkl")
 
 print("Model trained and saved!")
