@@ -55,14 +55,18 @@ def predict():
             return "<h3>Error: Please enter valid numeric values</h3>"
 
         # Convert to dataframe
-        input_df = pd.DataFrame([data])
+        input_df = pd.DataFrame([data]) 
 
         # Ensure correct feature order
         input_df = input_df[features]
 
         prediction = model.predict(input_df)[0]
 
-        return f"<h3>Prediction: {int(prediction)}</h3>"
+        # Convert numeric output to label
+        result = "Malignant" if prediction == 1 else "Benign"
+
+        return f"<h3>Prediction: {result}</h3>"
+
 
 
 
