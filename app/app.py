@@ -11,7 +11,7 @@ features = joblib.load("features.pkl")
 #home page
 @app.route('/')
 def home():
-    return "Breast Cancer Prediction API Running"
+    return "Welcome to the Breast Cancer Prediction App"
 
 
 #Predict rout taking user input to amke prediction
@@ -52,7 +52,7 @@ def predict():
                 "area_mean": float(request.form.get("area_mean"))
             }
         except:
-            return "<h3>Error: Please enter valid numeric values</h3>"
+            return "<h3>Error: Please enter numerical values</h3>"
 
         # Convert to dataframe
         input_df = pd.DataFrame([data]) 
